@@ -35,9 +35,8 @@ fun isNumberHappy(number: Int): Boolean {
  * Определить, угрожают ли они друг другу. Вернуть true, если угрожают.
  * Считать, что ферзи не могут загораживать друг друга.
  */
-fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
-    return ((x1 == x2) || (y1 == y2)) || (abs(x1 - x2)) == (abs(y1 - y2))
-}
+fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
+        (x1 == x2) || (y1 == y2) || abs(x1 - x2) == abs(y1 - y2)
 
 
 /**
@@ -48,9 +47,9 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
  */
 fun daysInMonth(month: Int, year: Int): Int {
     return when {
-        ((month == 2) && (year % 4 == 0) && ((year % 400 == 0) || (year % 100 != 0))) -> 29
-        (month == 2) -> 28
-        ((month == 4)) || (month == 6) || (month == 9) || (month == 11) -> 30
+        month == 2 && year % 4 == 0 && ((year % 400 == 0) || (year % 100 != 0)) -> 29
+        month == 2 -> 28
+        (month + month / 8) % 2 == 0 -> 30
         else -> 31
     }
 }
@@ -76,7 +75,13 @@ fun circleInside(x1: Double, y1: Double, r1: Double,
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
-fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean =
-        ((a <= r) && (b <= s)) || ((a <= r) && (c <= s)) || ((b <= r) && (a <= s)) || ((b <= r) && (c <= s))
-                || ((c <= r) && (a <= s)) || ((c <= r) && (b <= s))
+fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
+    val caseOne = (a <= r) && (b <= s)
+    val caseTwo = (a <= r) && (c <= s)
+    val caseThree = (b <= r) && (a <= s)
+    val caseFour = (b <= r) && (c <= s)
+    val caseFive = (c <= r) && (a <= s)
+    val caseSix = (c <= r) && (b <= s)
+    return caseOne || caseTwo || caseThree || caseFour || caseFive || caseSix
+}
 
