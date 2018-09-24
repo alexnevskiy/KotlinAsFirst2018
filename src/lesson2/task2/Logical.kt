@@ -76,12 +76,11 @@ fun circleInside(x1: Double, y1: Double, r1: Double,
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    val caseOne = (a <= r) && (b <= s)
-    val caseTwo = (a <= r) && (c <= s)
-    val caseThree = (b <= r) && (a <= s)
-    val caseFour = (b <= r) && (c <= s)
-    val caseFive = (c <= r) && (a <= s)
-    val caseSix = (c <= r) && (b <= s)
-    return caseOne || caseTwo || caseThree || caseFour || caseFive || caseSix
+    val min = minOf(a, b, c)
+    val max = maxOf(a, b, c)
+    val middle = a + b + c - min - max
+    val minSlot = minOf(r, s)
+    val middleSlot = maxOf(r, s)
+    return (min <= minSlot) && (middle <= middleSlot)
 }
 

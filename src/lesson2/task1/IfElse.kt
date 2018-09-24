@@ -88,10 +88,8 @@ fun timeForHalfWay(t1: Double, v1: Double,
     val s3 = t3 * v3
     val halfWay = (s1 + s2 + s3) / 2
     return when {
-        halfWay == s1 -> t1
-        halfWay < s1 -> (s1 - (s1 - halfWay)) / v1
-        halfWay == s1 + s2 -> t1 + t2
-        halfWay < s1 + s2 -> (halfWay - s1) / v2 + t1
+        halfWay <= s1 -> (s1 - (s1 - halfWay)) / v1
+        halfWay <= s1 + s2 -> (halfWay - s1) / v2 + t1
         else -> (halfWay - s1 - s2) / v3 + t1 + t2
     }
 }
@@ -110,9 +108,12 @@ fun whichRookThreatens(kingX: Int, kingY: Int,
                        rookX2: Int, rookY2: Int): Int {
     val equalityOne = kingX == rookX1 || kingY == rookY1
     val equalityTwo = kingX == rookX2 || kingY == rookY2
-    return if (equalityOne && equalityTwo) 3
-    else if (equalityTwo) 2
-    else if (equalityOne) 1 else 0
+    return when {
+        (equalityOne && equalityTwo) -> 3
+        (equalityTwo) -> 2
+        (equalityOne) -> 1
+        else -> 0
+    }
 }
 
 /**
@@ -130,9 +131,12 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
                           bishopX: Int, bishopY: Int): Int {
     val equalityOne = kingX == rookX || kingY == rookY
     val equalityTwo = abs(kingX - bishopX) == abs(kingY - bishopY)
-    return if (equalityOne && equalityTwo) 3
-    else if (equalityTwo) 2
-    else if (equalityOne) 1 else 0
+    return when {
+        (equalityOne && equalityTwo) -> 3
+        (equalityTwo) -> 2
+        (equalityOne) -> 1
+        else -> 0
+    }
 }
 
 /**
