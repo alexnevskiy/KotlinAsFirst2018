@@ -138,12 +138,7 @@ fun minDivisor(n: Int): Int {
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int {
-    for (i in n - 1 downTo 2) {
-        if (n % i == 0) return i
-    }
-    return 1
-}
+fun maxDivisor(n: Int): Int = n / minDivisor(n)
 
 /**
  * Простая
@@ -167,14 +162,8 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * то есть, существует ли такое целое k, что m <= k*k <= n.
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
-fun squareBetweenExists(m: Int, n: Int): Boolean {
-    val min = minOf(m, n)
-    val max = maxOf(m, n)
-    for (i in sqrt(m.toDouble()).toInt()..sqrt(n.toDouble()).toInt()) {
-        if ((sqr(i) >= min) && (sqr(i) <= max)) return true
-    }
-    return false
-}
+fun squareBetweenExists(m: Int, n: Int): Boolean =
+        ceil(sqrt(m.toDouble())).toInt() <= floor(sqrt(n.toDouble())).toInt()
 
 /**
  * Средняя
@@ -213,14 +202,13 @@ fun collatzSteps(x: Int): Int {
 fun sin(x: Double, eps: Double): Double {
     val remainderX = x % (2 * PI)
     var sumOfTerms = 0.0
-    var k = 0
-    var n = 1
-    var degreeX = pow(remainderX, n * 1.0)
-    while (abs(degreeX) / factorial(n) >= abs(eps)) {
-        sumOfTerms += degreeX / factorial(n) * pow(-1.0, k * 1.0)
-        k++
+    var n = 3
+    var degreeX = remainderX
+    while (abs(degreeX) >= abs(eps)) {
+        sumOfTerms += degreeX
+        degreeX = pow(remainderX, n * 1.0) / factorial(n)
+        if ((n + 1) % 4 == 0) degreeX = -degreeX
         n += 2
-        degreeX = pow(remainderX, n * 1.0)
     }
     return sumOfTerms
 }
@@ -235,14 +223,13 @@ fun sin(x: Double, eps: Double): Double {
 fun cos(x: Double, eps: Double): Double {
     val remainderX = x % (2 * PI)
     var sumOfTerms = 0.0
-    var k = 0
-    var n = 0
-    var degreeX = pow(remainderX, n * 1.0)
-    while (abs(degreeX) / factorial(n) >= abs(eps)) {
-        sumOfTerms += degreeX / factorial(n) * pow(-1.0, k * 1.0)
-        k++
+    var n = 2
+    var degreeX = 1.0
+    while (abs(degreeX) >= abs(eps)) {
+        sumOfTerms += degreeX
+        degreeX = -pow(remainderX, n * 1.0) / factorial(n)
+        if (n % 4 == 0) degreeX = -degreeX
         n += 2
-        degreeX = pow(remainderX, n * 1.0)
     }
     return sumOfTerms
 }
