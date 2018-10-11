@@ -206,8 +206,7 @@ fun sin(x: Double, eps: Double): Double {
     var degreeX = remainderX
     while (abs(degreeX) >= abs(eps)) {
         sumOfTerms += degreeX
-        degreeX = pow(remainderX, n * 1.0) / factorial(n)
-        if ((n + 1) % 4 == 0) degreeX = -degreeX
+        degreeX *= -1 * sqr(remainderX) / ((n - 1) * n)
         n += 2
     }
     return sumOfTerms
@@ -227,8 +226,7 @@ fun cos(x: Double, eps: Double): Double {
     var degreeX = 1.0
     while (abs(degreeX) >= abs(eps)) {
         sumOfTerms += degreeX
-        degreeX = -pow(remainderX, n * 1.0) / factorial(n)
-        if (n % 4 == 0) degreeX = -degreeX
+        degreeX *= -1 * sqr(remainderX) / ((n - 1) * n)
         n += 2
     }
     return sumOfTerms
