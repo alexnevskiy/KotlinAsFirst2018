@@ -300,7 +300,7 @@ fun decimalFromString(str: String, base: Int): Int {
     val list = listOf("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
             "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")
     val revStr = str.reversed()
-    var number = 0.0
+    var number: Double
     number = if (revStr[0].toDouble() - 48 < 10) revStr[0].toDouble() - 48
     else (list.indexOf(revStr[0].toString()) + 10).toDouble()
     for (i in 1 until revStr.length) {
