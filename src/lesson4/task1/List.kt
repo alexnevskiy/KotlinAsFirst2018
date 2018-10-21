@@ -193,7 +193,7 @@ fun polynom(p: List<Double>, x: Double): Double {
  */
 fun accumulate(list: MutableList<Double>): MutableList<Double> {
     var sum = 0.0
-    var n = 0.0
+    var n: Double
     return if (list.isNotEmpty()) {
         for (i in 0 until list.size) {
             n = list[i]
@@ -233,7 +233,7 @@ fun factorize(n: Int): List<Int> {
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String = TODO()
+fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*")
 
 /**
  * Средняя
@@ -242,7 +242,15 @@ fun factorizeToString(n: Int): String = TODO()
  * Результат перевода вернуть в виде списка цифр в base-ичной системе от старшей к младшей,
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
-fun convert(n: Int, base: Int): List<Int> = TODO()
+fun convert(n: Int, base: Int): List<Int> {
+    val list = mutableListOf<Int>()
+    var number = n
+    while (number > 0) {
+        list.add(number % base)
+        number /= base
+    }
+    return list.reversed()
+}
 
 /**
  * Сложная
@@ -252,7 +260,18 @@ fun convert(n: Int, base: Int): List<Int> = TODO()
  * строчными буквами: 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
-fun convertToString(n: Int, base: Int): String = TODO()
+fun convertToString(n: Int, base: Int): String {
+    var string = ""
+    var number = n
+    val list = listOf("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+            "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")
+    while (number > 0) {
+        val i = number % base
+        string += if (i < 10) i.toString() else list[i - 10]
+        number /= base
+    }
+    return string.reversed()
+}
 
 /**
  * Средняя
@@ -261,7 +280,12 @@ fun convertToString(n: Int, base: Int): String = TODO()
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int = TODO()
+fun decimal(digits: List<Int>, base: Int): Int {
+    val revDigits = digits.reversed()
+    var number = revDigits[0].toDouble()
+    for (i in 1 until revDigits.size) number += revDigits[i] * base.toDouble().pow(i)
+    return number.toInt()
+}
 
 /**
  * Сложная
@@ -272,7 +296,20 @@ fun decimal(digits: List<Int>, base: Int): Int = TODO()
  * 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: str = "13c", base = 14 -> 250
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int {
+    val list = listOf("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+            "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")
+    val revStr = str.reversed()
+    var number = 0.0
+    number = if (revStr[0].toDouble() - 48 < 10) revStr[0].toDouble() - 48
+    else (list.indexOf(revStr[0].toString()) + 10).toDouble()
+    for (i in 1 until revStr.length) {
+        number += if (revStr[i].toDouble() - 48 < 10) ((revStr[i].toDouble() - 48) * base.toDouble().pow(i))
+        else ((list.indexOf(revStr[i].toString()) + 10) * base.toDouble().pow(i))
+    }
+    return number.toInt()
+}
+
 
 /**
  * Сложная
@@ -282,7 +319,21 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    var string = ""
+    var number = n
+    val arab = listOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
+    val roman = listOf("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
+    var i = 0
+    while (number > 0) {
+        while (number >= arab[i]) {
+            string += roman[i]
+            number -= arab[i]
+        }
+        i++
+    }
+    return string
+}
 
 /**
  * Очень сложная
