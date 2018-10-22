@@ -342,4 +342,61 @@ fun roman(n: Int): String {
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    val oneToNine = listOf(" один", " два", " три", " четыре", " пять", " шесть", " семь", " восемь", " девять")
+    val tenToNineteen = listOf(" десять", " одиннадцать", " двенадцать", " тринадцать", " четырнадцать",
+            " пятнадцать", " шестнадцать", " семнадцать", " восемнадцать", " девятнадцать")
+    val twentyToNinety = listOf(" двадцать", " тридцать", " сорок", " пятьдесят",
+            " шестьдесят", " семьдесят", " восемьдесят", " девяносто")
+    val hundreds = listOf(" сто", " двести", " триста", " четыреста", " пятьсот",
+            " шестьсот", " семьсот", " восемьсот", " девятьсот")
+    val thousand = listOf(" тысяча", " тысячи", " тысяч")
+    val oneToNineInclined = listOf(" одна", " две", " три", " четыре", " пять", " шесть", " семь", " восемь", " девять")
+    var number = n
+    var string = ""
+    if (number > 99999) {
+        string += hundreds[number / 100000 - 1]
+        if (number % 100000 / 1000 == 0) string += thousand[2]
+        number %= 100000
+    }
+    if (number > 9999) {
+        if (number / 10000 > 1) {
+            string += twentyToNinety[number / 10000 - 2]
+            number %= 10000
+            if (number % 10000 / 1000 == 0) {
+                string += thousand[2]
+                number %= 1000
+            }
+        } else {
+            string += tenToNineteen[number % 10000 / 1000]
+            string += thousand[2]
+            number %= 1000
+        }
+    }
+    if (number > 999) {
+        string += oneToNineInclined[number / 1000 - 1]
+        string += when (number / 1000) {
+            1 -> thousand[0]
+            2, 3, 4 -> thousand[1]
+            else -> thousand[2]
+        }
+        number %= 1000
+    }
+    if (number > 99) {
+        string += hundreds[number / 100 - 1]
+        number %= 100
+    }
+    if (number > 9) {
+        if (number / 10 > 1) {
+            string += twentyToNinety[number / 10 - 2]
+            number %= 10
+        } else {
+            string += tenToNineteen[number % 10]
+            number = 0
+        }
+    }
+    if (number > 0) {
+        string += oneToNine[number - 1]
+    }
+    return string.substring(1, string.length)
+}
