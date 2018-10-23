@@ -116,12 +116,7 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double {
-    var result = 0.0
-    for (i in v)
-        result += sqr(i)
-    return abs(sqrt(result))
-}
+fun abs(v: List<Double>): Double = sqrt(v.fold(0.0) { previousResult, element -> previousResult + sqr(element) })
 
 /**
  * Простая
@@ -143,13 +138,11 @@ fun mean(list: List<Double>): Double {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
-    return if (list.isNotEmpty()) {
-        val average = mean(list)
-        for (element in 0 until list.size) {
-            list[element] -= average
-        }
-        list
-    } else list
+    val average = mean(list)
+    for (element in 0 until list.size) {
+        list[element] -= average
+    }
+    return list
 }
 
 /**
@@ -176,8 +169,7 @@ fun times(a: List<Double>, b: List<Double>): Double {
  */
 fun polynom(p: List<Double>, x: Double): Double {
     var sum = 0.0
-    if (p.isEmpty()) return 0.0
-    else for (i in 0 until p.size) sum += p[i] * x.pow(i)
+    for (i in 0 until p.size) sum += p[i] * x.pow(i)
     return sum
 }
 
@@ -193,15 +185,12 @@ fun polynom(p: List<Double>, x: Double): Double {
  */
 fun accumulate(list: MutableList<Double>): MutableList<Double> {
     var sum = 0.0
-    var n: Double
-    return if (list.isNotEmpty()) {
-        for (i in 0 until list.size) {
-            n = list[i]
-            list[i] += sum
-            sum += n
-        }
-        list
-    } else list
+    for (i in 0 until list.size) {
+        val n = list[i]
+        list[i] += sum
+        sum += n
+    }
+    return list
 }
 
 /**
@@ -261,7 +250,7 @@ fun convert(n: Int, base: Int): List<Int> {
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
 fun convertToString(n: Int, base: Int): String {
-    var string = ""
+    var string = buildString { }
     var number = n
     val list = listOf("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
             "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")
@@ -300,8 +289,7 @@ fun decimalFromString(str: String, base: Int): Int {
     val list = listOf("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
             "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")
     val revStr = str.reversed()
-    var number: Double
-    number = if (revStr[0].toDouble() - 48 < 10) revStr[0].toDouble() - 48
+    var number = if (revStr[0].toDouble() - 48 < 10) revStr[0].toDouble() - 48
     else (list.indexOf(revStr[0].toString()) + 10).toDouble()
     for (i in 1 until revStr.length) {
         number += if (revStr[i].toDouble() - 48 < 10) ((revStr[i].toDouble() - 48) * base.toDouble().pow(i))
@@ -320,7 +308,7 @@ fun decimalFromString(str: String, base: Int): Int {
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    var string = ""
+    var string = buildString { }
     var number = n
     val arab = listOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
     val roman = listOf("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
@@ -353,7 +341,7 @@ fun russian(n: Int): String {
     val thousand = listOf(" тысяча", " тысячи", " тысяч")
     val oneToNineInclined = listOf(" одна", " две", " три", " четыре", " пять", " шесть", " семь", " восемь", " девять")
     var number = n
-    var string = ""
+    var string = buildString { }
     if (number > 99999) {
         string += hundreds[number / 100000 - 1]
         if (number % 100000 / 1000 == 0) string += thousand[2]
