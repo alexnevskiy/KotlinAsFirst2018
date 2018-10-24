@@ -153,10 +153,8 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.0.
  */
 fun times(a: List<Double>, b: List<Double>): Double {
-    var sum = 0.0
     if (a.isEmpty() || b.isEmpty()) return 0.0
-    else for (i in 0 until a.size) sum += a[i] * b[i]
-    return sum
+    return a.zip(b).fold(0.0) { prev, (first, second) -> prev + first * second }
 }
 
 /**
@@ -250,19 +248,17 @@ fun convert(n: Int, base: Int): List<Int> {
  * строчными буквами: 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
-fun convertToString(n: Int, base: Int): String {
-    var string = buildString { }
+fun convertToString(n: Int, base: Int): String = buildString {
     var number = n
     val list = listOf("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
             "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")
-    if (number == 0) string += 0
+    if (number == 0) this.append(0)
     while (number > 0) {
         val i = number % base
-        string += if (i < 10) i.toString() else list[i - 10]
+        this.append(if (i < 10) i.toString() else list[i - 10])
         number /= base
     }
-    return string.reversed()
-}
+}.reversed()
 
 /**
  * Средняя
@@ -309,20 +305,18 @@ fun decimalFromString(str: String, base: Int): Int {
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String {
-    var string = buildString { }
+fun roman(n: Int): String = buildString {
     var number = n
     val arab = listOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
     val roman = listOf("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
     var i = 0
     while (number > 0) {
         while (number >= arab[i]) {
-            string += roman[i]
+            this.append(roman[i])
             number -= arab[i]
         }
         i++
     }
-    return string
 }
 
 /**
@@ -332,7 +326,7 @@ fun roman(n: Int): String {
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String {
+fun russian(n: Int): String = buildString {
     val oneToNine = listOf(" один", " два", " три", " четыре", " пять", " шесть", " семь", " восемь", " девять")
     val tenToNineteen = listOf(" десять", " одиннадцать", " двенадцать", " тринадцать", " четырнадцать",
             " пятнадцать", " шестнадцать", " семнадцать", " восемнадцать", " девятнадцать")
@@ -343,50 +337,49 @@ fun russian(n: Int): String {
     val thousand = listOf(" тысяча", " тысячи", " тысяч")
     val oneToNineInclined = listOf(" одна", " две", " три", " четыре", " пять", " шесть", " семь", " восемь", " девять")
     var number = n
-    var string = buildString { }
     if (number > 99999) {
-        string += hundreds[number / 100000 - 1]
-        if (number % 100000 / 1000 == 0) string += thousand[2]
+        this.append(hundreds[number / 100000 - 1])
+        if (number % 100000 / 1000 == 0) this.append(thousand[2])
         number %= 100000
     }
     if (number > 9999) {
         if (number / 10000 > 1) {
-            string += twentyToNinety[number / 10000 - 2]
+            this.append(twentyToNinety[number / 10000 - 2])
             number %= 10000
             if (number % 10000 / 1000 == 0) {
-                string += thousand[2]
+                this.append(thousand[2])
                 number %= 1000
             }
         } else {
-            string += tenToNineteen[number % 10000 / 1000]
-            string += thousand[2]
+            this.append(tenToNineteen[number % 10000 / 1000])
+            this.append(thousand[2])
             number %= 1000
         }
     }
     if (number > 999) {
-        string += oneToNineInclined[number / 1000 - 1]
-        string += when (number / 1000) {
+        this.append(oneToNineInclined[number / 1000 - 1])
+        this.append(when (number / 1000) {
             1 -> thousand[0]
             2, 3, 4 -> thousand[1]
             else -> thousand[2]
-        }
+        })
         number %= 1000
     }
     if (number > 99) {
-        string += hundreds[number / 100 - 1]
+        this.append(hundreds[number / 100 - 1])
         number %= 100
     }
     if (number > 9) {
         if (number / 10 > 1) {
-            string += twentyToNinety[number / 10 - 2]
+            this.append(twentyToNinety[number / 10 - 2])
             number %= 10
         } else {
-            string += tenToNineteen[number % 10]
+            this.append(tenToNineteen[number % 10])
             number = 0
         }
     }
     if (number > 0) {
-        string += oneToNine[number - 1]
+        this.append(oneToNine[number - 1])
     }
-    return string.substring(1, string.length)
+    return this.substring(1, this.length)
 }
