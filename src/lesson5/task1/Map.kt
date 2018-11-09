@@ -153,7 +153,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
     val buffer = mutableMapOf<String, MutableList<Double>>()
     for ((name, value) in stockPrices) {
         if (buffer[name] == null) buffer[name] = mutableListOf()
-        buffer[name]?.add(value)
+        buffer[name]!!.add(value)
     }
     for ((name, value) in buffer) averageCost[name] = mean(value)
     return averageCost
