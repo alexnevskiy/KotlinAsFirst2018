@@ -355,7 +355,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     var variableCapacity = capacity
     val treasuresMap = mutableMapOf<String, Pair<Int, Int>>()
     treasuresMap.putAll(treasures)
-    treasuresMap.filterValues { it.first <= capacity }
+    treasuresMap.filterValues { it.first <= capacity }.toList().sortedByDescending { it.second.second }.toMap()
     if (treasuresMap.isEmpty()) return emptySet()
     for ((name, features) in treasures) {
         if (features.first > capacity) treasuresMap.remove(name)
@@ -366,5 +366,5 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
             variableCapacity -= features.first
         }
     }
-    return takenTreasures
+    return takenTreasures.sortedDescending().toSet()
 }
