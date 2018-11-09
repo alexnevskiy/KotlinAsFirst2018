@@ -171,15 +171,16 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *     "печенье"
  *   ) -> "Мария"
  */
-fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? = buildString {
+fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
     var costMax = Double.MAX_VALUE
+    var type: String? = null
     for ((name, features) in stuff) {
         if ((features.first == kind) && (features.second < costMax)) {
-            this.append(name)
+            type = name
             costMax = features.second
         }
     }
-    return if (this.isEmpty()) null else this.toString()
+    return type
 }
 
 /**
