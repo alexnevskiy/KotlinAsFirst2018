@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import lesson4.task1.mean
+
 /**
  * Пример
  *
@@ -153,7 +155,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
         if (buffer[name] == null) buffer[name] = mutableListOf()
         buffer[name]?.add(value)
     }
-    for ((name, _) in buffer) averageCost[name] = buffer[name]!!.sum() / buffer[name]!!.size
+    for ((name, value) in buffer) averageCost[name] = mean(value)
     return averageCost
 }
 
