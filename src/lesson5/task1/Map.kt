@@ -100,7 +100,8 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
     val phoneBook = mutableMapOf<String, String>()
     phoneBook.putAll(mapA)
     for ((title, number) in phoneBook) {
-        if ((mapB.containsKey(title)) && (number != mapB[title])) phoneBook[title] = "$number, ${mapB[title]}"
+        val member = mapB[title]
+        if ((member != null) && (number != member)) phoneBook[title] = "$number, ${mapB[title]}"
         else phoneBook[title] = number
     }
     return mapB + phoneBook
@@ -122,8 +123,8 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
         if (map[value] == null) map[value] = mutableListOf(name)
         else map[value]?.add(name)
     }
-    for ((value, _) in map) map[value]!!.sortDescending()
-    return map.mapValues { it.value.toList() }.toMap()
+    for ((value, _) in map) map[value]
+    return map
 }
 
 /**
@@ -297,10 +298,10 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    val list = words.map { it.toList().sorted() }
-    for (i in 0 until list.size) {
-        val member = list[i]
-        if (list.subList(i + 1, list.size).any { it == member }) return true
+    val map = mutableMapOf<String, List<Char>>()
+    for (name in words) {
+        if (map.containsValue(name.toList().sorted())) return true
+        else map[name] = name.toList().sorted()
     }
     return false
 }
@@ -325,8 +326,10 @@ fun hasAnagrams(words: List<String>): Boolean {
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     for (i in 0 until list.size) {
         val member = list[i]
-        val secondIndex = list.subList(i + 1, list.size).indexOfFirst { member + it == number }
-        if (secondIndex != -1) return i to (secondIndex + i + 1)
+        val secondNumber = number - member
+        val listPlusOne = list.subList(i + 1, list.size)
+        val secondIndex = listPlusOne.indexOf(secondNumber)
+        if (secondIndex != -1) return i to (secondIndex + 1)
     }
     return -1 to -1
 }

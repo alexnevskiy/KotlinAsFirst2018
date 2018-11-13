@@ -145,7 +145,7 @@ class Tests {
                 buildGrades(mapOf("Марат" to 3, "Семён" to 5, "Михаил" to 5))
         )
         assertEquals(
-                mapOf(3 to listOf("Семён", "Михаил", "Марат")),
+                mapOf(3 to listOf("Марат", "Семён", "Михаил")),
                 buildGrades(mapOf("Марат" to 3, "Семён" to 3, "Михаил" to 3))
         )
     }
@@ -291,6 +291,7 @@ class Tests {
         assertFalse(hasAnagrams(emptyList()))
         assertTrue(hasAnagrams(listOf("рот", "свет", "тор")))
         assertFalse(hasAnagrams(listOf("рот", "свет", "код", "дверь")))
+        assertFalse(hasAnagrams(listOf("израилем", "реализме")))
     }
 
     @Test
