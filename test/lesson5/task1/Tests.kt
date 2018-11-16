@@ -184,6 +184,12 @@ class Tests {
         assertNull(
                 findCheapestStuff(
                         mapOf("Мария" to ("печенье" to 20.0), "Орео" to ("печенье" to 100.0)),
+                        ""
+                )
+        )
+        assertNull(
+                findCheapestStuff(
+                        mapOf("Мария" to ("печенье" to 20.0), "Орео" to ("печенье" to 100.0)),
                         "торт"
                 )
         )
@@ -298,12 +304,12 @@ class Tests {
     @Tag("Hard")
     fun findSumOfTwo() {
         assertEquals(
-                Pair(-1, -1),
-                findSumOfTwo(emptyList(), 1)
-        )
-        assertEquals(
                 Pair(0, 2),
                 findSumOfTwo(listOf(1, 2, 3), 4)
+        )
+        assertEquals(
+                Pair(-1, -1),
+                findSumOfTwo(emptyList(), 1)
         )
         assertEquals(
                 Pair(-1, -1),
@@ -333,6 +339,18 @@ class Tests {
                                 "44" to (2 to 149), "45" to (2 to 149), "46" to (149 to 2), "47" to (36 to 293),
                                 "48" to (148 to 2)),
                         3649
+                )
+        )
+        assertEquals(
+                setOf("17", "16", "15", "14", "12", "11", "10", "9", "6", "5", "4", "2", "1", "0"),
+                bagPacking(
+                        mapOf("0" to (148 to 149), "1" to (1 to 2), "2" to (2 to 1), "3" to (149 to 1),
+                                "4" to (38 to 148), "5" to (352 to 148), "6" to (2 to 1), "7" to (492 to 149),
+                                "8" to (132 to 65), "9" to (2 to 2), "10" to (83 to 148), "11" to (149 to 407),
+                                "12" to (130 to 148), "13" to (353 to 148), "14" to (2 to 149), "15" to (2 to 149),
+                                "16" to (148 to 148), "17" to (148 to 148), "18" to (149 to 1), "19" to (379 to 149)),
+
+                        1230
                 )
         )
         assertEquals(

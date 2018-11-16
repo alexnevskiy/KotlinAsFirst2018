@@ -264,7 +264,6 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.intersect(b
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean =
         chars.joinToString().toLowerCase().toSet().containsAll(word.toLowerCase().toSet())
-
 /**
  * Средняя
  *
@@ -354,15 +353,27 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *   ) -> emptySet()
  */
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    val map = treasures.filterValues { it.first <= capacity }.toList().sortedByDescending { it.second.second }.toMap()
+    val map = treasures.filterValues { it.first <= capacity }
     if (map.isEmpty()) return emptySet()
-    var takenTreasures = setOf<String>()
-    var variableCapacity = capacity
-    for ((name, features) in map) {
-        if (features.first <= variableCapacity) {
-            takenTreasures += name
-            variableCapacity -= features.first
+    val price = mutableListOf(0)
+    val treasure = mutableListOf(emptySet<String>())
+    for (i in 1..capacity) {
+        var maxPrice = price[i - 1]
+        var maxTreasure = emptySet<String>()
+        var member = i - 1
+        for ((name, features) in map) {
+            if (features.first > i) continue
+            val difference = i - features.first
+            var priceInList = price[difference]
+            if (name !in treasure[difference]) priceInList += features.second
+            if (priceInList > maxPrice) {
+                maxTreasure = setOf(name)
+                member = difference
+                maxPrice = priceInList
+            }
         }
+        price += maxPrice
+        treasure += treasure[member] + maxTreasure
     }
-    return takenTreasures
+    return treasure.last()
 }
