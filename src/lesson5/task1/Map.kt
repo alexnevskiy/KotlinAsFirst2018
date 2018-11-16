@@ -363,12 +363,11 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
         var member = i - 1
         for ((name, features) in map) {
             if (features.first > i) continue
-            val difference = i - features.first
-            var priceInList = price[difference]
-            if (name !in treasure[difference]) priceInList += features.second
+            var priceInList = price[i - features.first]
+            if (name !in treasure[i - features.first]) priceInList += features.second
             if (priceInList > maxPrice) {
                 maxTreasure = setOf(name)
-                member = difference
+                member = i - features.first
                 maxPrice = priceInList
             }
         }
