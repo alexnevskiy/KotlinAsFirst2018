@@ -264,6 +264,7 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.intersect(b
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean =
         chars.joinToString().toLowerCase().toSet().containsAll(word.toLowerCase().toSet())
+
 /**
  * Средняя
  *
@@ -299,8 +300,9 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
 fun hasAnagrams(words: List<String>): Boolean {
     val map = mutableMapOf<String, List<Char>>()
     for (name in words) {
-        if (map.containsValue(name.toList().sorted())) return true
-        else map[name] = name.toList().sorted()
+        val sortedName = name.toList().sorted()
+        if (map.containsValue(sortedName)) return true
+        else map[name] = sortedName
     }
     return false
 }
@@ -324,11 +326,10 @@ fun hasAnagrams(words: List<String>): Boolean {
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     for (i in 0 until list.size) {
-        val member = list[i]
-        val secondNumber = number - member
-        val listPlusOne = list.subList(i + 1, list.size)
-        val secondIndex = listPlusOne.indexOf(secondNumber)
-        if (secondIndex != -1) return i to (secondIndex + i + 1)
+        val mutableList = list.toMutableList()
+        mutableList[i] = -1
+        val secondNumber = number - list[i]
+        if (secondNumber in mutableList) return i to mutableList.indexOf(secondNumber)
     }
     return -1 to -1
 }
