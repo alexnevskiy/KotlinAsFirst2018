@@ -304,6 +304,18 @@ class Tests {
     @Tag("Hard")
     fun findSumOfTwo() {
         assertEquals(
+                Pair(0, 2),
+                findSumOfTwo(listOf(1, 2, 3), 4)
+        )
+        assertEquals(
+                Pair(-1, -1),
+                findSumOfTwo(emptyList(), 1)
+        )
+        assertEquals(
+                Pair(-1, -1),
+                findSumOfTwo(listOf(1, 2, 3), 6)
+        )
+        assertEquals(
                 Pair(6, 8),
                 findSumOfTwo(listOf(5543, 49288, 40699, 40700, 12086, 40700, 0, 1, 0, 0, 20610, 40699, 22317, 40700,
                         40700, 40700, 40699, 37100, 40699, 40699, 1, 44280, 0, 1, 1309, 36255, 1, 40699, 3098, 0,
@@ -316,18 +328,6 @@ class Tests {
                         40699, 0, 40099, 1, 3356, 1, 0, 40700, 0, 0, 0, 1, 0, 0, 40699, 0, 43973, 13206, 25969, 40700,
                         40699, 1, 0, 37036, 40699, 9804, 40524, 40700, 40700, 6863, 0, 40700, 7899, 0, 0, 21796, 40699,
                         0, 0, 0, 1, 1, 19759, 39921, 1887, 22569, 1, 0, 1), 0)
-        )
-        assertEquals(
-                Pair(0, 2),
-                findSumOfTwo(listOf(1, 2, 3), 4)
-        )
-        assertEquals(
-                Pair(-1, -1),
-                findSumOfTwo(emptyList(), 1)
-        )
-        assertEquals(
-                Pair(-1, -1),
-                findSumOfTwo(listOf(1, 2, 3), 6)
         )
     }
 
