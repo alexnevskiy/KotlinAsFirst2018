@@ -121,7 +121,7 @@ fun dateDigitToStr(digital: String): String {
  * При неверном формате вернуть пустую строку
  */
 fun flattenPhoneNumber(phone: String): String =
-        if (Regex("""^(\+\d+)?\(\d+0,\)\d+|\d+""").matches(phone.replace(Regex("""[\s-]"""), "")))
+        if (Regex("""^(\+\d+)?\(\d+\)\d+|\d+""").matches(phone.replace(Regex("""[\s-]"""), "")))
             phone.replace(Regex("""[()\s-]"""), "") else ""
 
 /**
@@ -152,10 +152,9 @@ fun bestLongJump(jumps: String): Int {
  * При нарушении формата входной строки вернуть -1.
  */
 fun bestHighJump(jumps: String): Int {
-    val replaceJumps = jumps.replace(Regex("""\d{3}( )%+[^+]( )|%"""), "")
-    val replaceJumpsTwo = replaceJumps.replace(Regex("""\d{3}( )[^+]|( )\+$|\d{3}( )$"""), "").trim()
-    val replaceJumpsThree = replaceJumpsTwo.replace(Regex("""\d{3}( )[^+]|( )\+$|\d{3}( )$"""), "").trim()
-    val parts = replaceJumpsThree.split(" + ")
+    val replaceJumps = jumps.replace(Regex("""^( )\+|\d{3}( )%$|( )\+$|\d{3}( )%+[^+]( )|\d{3}( )-|\d{3}-|%"""), "")
+    val replaceJumps2 = replaceJumps.replace(Regex("""[^\d]\s+$"""), "").trim()
+    val parts = replaceJumps2.split(" + ")
     for (i in parts) if (!i.contains(Regex("""\d"""))) return -1
     return parts.map { it.toInt() }.max()!!.toInt()
 }
@@ -169,17 +168,7 @@ fun bestHighJump(jumps: String): Int {
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int {
-    if (expression.contains(Regex("""\d\+|\+\d|\d-|-\d|\d( )\d"""))) throw IllegalArgumentException()
-    val parts = expression.split(" ")
-    var calculation = parts[0].toInt()
-    if (parts.size == 1) return calculation
-    else for (i in 2..parts.size step 2) {
-        if (parts[i - 1] == "+") calculation += parts[i].toInt()
-        else calculation -= parts[i].toInt()
-    }
-    return calculation
-}
+fun plusMinus(expression: String): Int = TODO()
 
 /**
  * Сложная
@@ -190,17 +179,7 @@ fun plusMinus(expression: String): Int {
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int {
-    val parts = str.split(" ")
-    var index = 0
-    if (parts.size > 1) {
-        for (i in 0..parts.size) {
-            if (parts[i].toLowerCase() == parts[i + 1].toLowerCase()) return index
-            index += parts[i].length + 1
-        }
-    }
-    return -1
-}
+fun firstDuplicateIndex(str: String): Int = TODO()
 
 /**
  * Сложная
@@ -213,19 +192,7 @@ fun firstDuplicateIndex(str: String): Int {
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше либо равны нуля.
  */
-fun mostExpensive(description: String): String {
-    if (!description.contains(Regex("""\s?[А-Я][а-я]+( )\d+\.?\d?;?\s?"""))) return ""
-    val parts = description.split(" ", "; ")
-    var maxCost = 0.0
-    var name = ""
-    for (i in 1..parts.size step 2) {
-        if (parts[i].toDouble() > maxCost) {
-            maxCost = parts[i].toDouble()
-            name = parts[i - 1]
-        }
-    }
-    return name
-}
+fun mostExpensive(description: String): String = TODO()
 
 /**
  * Сложная
@@ -238,20 +205,7 @@ fun mostExpensive(description: String): String {
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int {
-    if (!roman.contains(Regex("""M|C|D|L|X|V|I"""))) return -1
-    var sum = 0
-    val rom = mapOf("M" to 1000, "D" to 500, "C" to 100, "L" to 50, "X" to 10, "V" to 5, "I" to 1)
-    val romDual = mapOf("CM" to -200, "CD" to -200, "XC" to -20, "XL" to -20, "IX" to -2, "IV" to -2)
-    val list = roman.toList().map { it.toString() }
-    for (i in list) {
-        sum += rom[i]!!
-    }
-    for ((name, value) in romDual) {
-        if (name in roman) sum += value
-    }
-    return sum
-}
+fun fromRoman(roman: String): Int = TODO()
 
 /**
  * Очень сложная
