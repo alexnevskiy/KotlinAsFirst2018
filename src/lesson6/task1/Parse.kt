@@ -98,7 +98,7 @@ fun dateDigitToStr(digital: String): String {
     if (parts.size != 3) return ""
     val monthWord = listOf("января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября",
             "октября", "ноября", "декабря")
-    if ((parts[1].toIntOrNull() ?: return "") == 0) return ""
+    if ((parts[1].toIntOrNull() ?: return "") == 0 || (parts[1].toIntOrNull() ?: return "") > 12) return ""
     return try {
         if (daysInMonth(parts[1].toInt(), parts[2].toInt()) >= parts[0].toInt())
             String.format("%d %s %s", parts[0].toInt(), monthWord[parts[1].toInt() - 1], parts[2].toInt())
@@ -152,9 +152,9 @@ fun bestLongJump(jumps: String): Int {
  * При нарушении формата входной строки вернуть -1.
  */
 fun bestHighJump(jumps: String): Int {
-    val replaceJumps = jumps.replace(Regex("""\d{3}( )%+[^+]( )|%"""), "")
-    val replaceJumpsTwo = replaceJumps.replace(Regex("""\d{3}( )[^+]|( )\+$|\d{3}( )$"""), "").trim()
-    val replaceJumpsThree = replaceJumpsTwo.replace(Regex("""\d{3}( )[^+]|( )\+$|\d{3}( )$"""), "").trim()
+    val replaceJumps = jumps.replace(Regex("""\d+( )%+[^+]( )|%"""), "")
+    val replaceJumpsTwo = replaceJumps.replace(Regex("""\d+( )[^+]|( )\+$|\d+( )$"""), "").trim()
+    val replaceJumpsThree = replaceJumpsTwo.replace(Regex("""\d+( )[^+]|( )\+$|\d+( )$"""), "").trim()
     val parts = replaceJumpsThree.split(" + ")
     for (i in parts) if (!i.contains(Regex("""\d"""))) return -1
     return parts.map { it.toInt() }.max()!!.toInt()
