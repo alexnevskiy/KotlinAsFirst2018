@@ -240,7 +240,7 @@ fun mostExpensive(description: String): String {
  * Вернуть -1, если roman не является корректным римским числом
  */
 fun fromRoman(roman: String): Int {
-    if (!roman.contains(Regex("""M|C|D|L|X|V|I"""))) return -1
+    if (roman.contains(Regex("""[^MCDLXVI]"""))) return -1
     var sum = 0
     val rom = mapOf("M" to 1000, "D" to 500, "C" to 100, "L" to 50, "X" to 10, "V" to 5, "I" to 1)
     val romDual = mapOf("CM" to -200, "CD" to -200, "XC" to -20, "XL" to -20, "IX" to -2, "IV" to -2)
