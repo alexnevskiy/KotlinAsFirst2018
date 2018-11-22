@@ -251,7 +251,7 @@ fun fromRoman(roman: String): Int {
     for ((name, value) in romDual) {
         if (name in roman) sum += value
     }
-    return sum
+    return if (sum == 0) -1 else sum
 }
 
 /**
