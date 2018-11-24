@@ -59,6 +59,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
     val read = File(inputName).bufferedReader().readLines().joinToString().toLowerCase()
     for (i in 0 until substrings.size) map[substrings[i]] = 0
     for (name in substrings) {
+        if (map[name]!! > 0) continue
         var member = Regex(name.toLowerCase()).find(read)
         while (member != null) {
             member = Regex(name.toLowerCase()).find(read, member.range.first + 1)
