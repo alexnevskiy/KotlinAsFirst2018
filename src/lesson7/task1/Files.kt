@@ -123,7 +123,7 @@ fun centerFile(inputName: String, outputName: String) {
     var maxLineLength = 0
     for (line in File(inputName).readLines()) {
         if (line.length > maxLineLength) {
-            maxLineLength = line.length
+            maxLineLength = line.trim().length
         }
     }
     for (line in File(inputName).readLines()) {
