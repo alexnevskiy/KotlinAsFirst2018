@@ -290,4 +290,45 @@ fun fromRoman(roman: String): Int {
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+    val firstBracket = mutableListOf<Int>()
+    val pairBracket = mutableListOf<Pair<Int, Int>>()
+    var commandNumber = 0
+    var cellNumber = cells / 2
+    val summaryCells = mutableListOf<Int>()
+    var variableLimit = limit
+    if (!commands.contains(Regex("""[+\-><\[\]\s]"""))) throw IllegalArgumentException()
+    for (i in 0 until cells) {
+        summaryCells.add(i, 0)
+    }
+    for (i in 0 until commands.length) {
+        if (commands[i] == '[') firstBracket += i
+        if (commands[i] == ']') {
+            if (firstBracket.isEmpty()) throw IllegalArgumentException()
+            pairBracket += firstBracket.last() to i
+            firstBracket -= firstBracket.last()
+        }
+    }
+    if (firstBracket.isNotEmpty()) throw IllegalArgumentException()
+    while (variableLimit != 0 && commandNumber != commands.length) {
+        when (commands[commandNumber]) {
+            '+' -> summaryCells[cellNumber]++
+            '-' -> summaryCells[cellNumber]--
+            '>' -> {
+                cellNumber++
+                if (cellNumber > cells - 1) throw IllegalStateException()
+            }
+            '<' -> {
+                cellNumber--
+                if (cellNumber < 0) throw IllegalStateException()
+            }
+            '[' -> if (summaryCells[cellNumber] == 0)
+                commandNumber = pairBracket.find { it.first == commandNumber }!!.second
+            ']' -> if (summaryCells[cellNumber] != 0)
+                commandNumber = pairBracket.find { it.second == commandNumber }!!.first
+        }
+        variableLimit--
+        commandNumber++
+    }
+    return summaryCells
+}
