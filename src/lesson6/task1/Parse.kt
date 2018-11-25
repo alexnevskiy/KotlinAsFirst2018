@@ -297,10 +297,11 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     var cellNumber = cells / 2
     val summaryCells = mutableListOf<Int>()
     var variableLimit = limit
-    if (!commands.contains(Regex("""[+\-><\[\]\s]"""))) throw IllegalArgumentException()
     for (i in 0 until cells) {
         summaryCells.add(i, 0)
     }
+    if (commands == "") return summaryCells
+    if (!commands.contains(Regex("""[+\-><\[\]\s]"""))) throw IllegalArgumentException()
     for (i in 0 until commands.length) {
         if (commands[i] == '[') firstBracket += i
         if (commands[i] == ']') {
