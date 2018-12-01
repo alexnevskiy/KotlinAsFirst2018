@@ -98,7 +98,11 @@ fun dateDigitToStr(digital: String): String {
     if (parts.size != 3) return ""
     val monthWord = listOf("января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября",
             "октября", "ноября", "декабря")
-    if ((parts[1].toIntOrNull() ?: return "") == 0 || (parts[1].toIntOrNull() ?: return "") > 12) return ""
+    try {
+        if (parts[1].toInt() == 0 || parts[1].toInt() > 12) return ""
+    } catch (e: NumberFormatException) {
+
+    }
     return try {
         if (daysInMonth(parts[1].toInt(), parts[2].toInt()) >= parts[0].toInt())
             String.format("%d %s %s", parts[0].toInt(), monthWord[parts[1].toInt() - 1], parts[2].toInt())
@@ -135,10 +139,10 @@ fun flattenPhoneNumber(phone: String): String =
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
 fun bestLongJump(jumps: String): Int {
-    val replaceJumps = jumps.replace(Regex("""\s+%|\s+-|%|-"""), "").trim()
-    val replaceJumpsTwo = replaceJumps.replace(Regex("""\s\s+"""), " ")
+    val replaceJumps = jumps.replace(Regex("""[-%]"""), "").trim()
+    val replaceJumpsTwo = replaceJumps.replace(Regex("""\s+"""), " ")
     val parts = replaceJumpsTwo.split(" ")
-    for (i in parts) if (!i.contains(Regex("""\d|[-%]"""))) return -1
+    for (i in parts) if (!i.contains(Regex("""\d"""))) return -1
     return parts.map { it.toInt() }.max()!!.toInt()
 }
 
@@ -153,10 +157,9 @@ fun bestLongJump(jumps: String): Int {
  * При нарушении формата входной строки вернуть -1.
  */
 fun bestHighJump(jumps: String): Int {
-    val replaceJumps = jumps.replace(Regex("""\d+( )%+[^+]( )|%"""), "")
-    val replaceJumpsTwo = replaceJumps.replace(Regex("""\d+( )[^+]|( )\+$|\d+( )$"""), "").trim()
-    val replaceJumpsThree = replaceJumpsTwo.replace(Regex("""\d+( )[^+]|( )\+$|\d+( )$"""), "").trim()
-    val parts = replaceJumpsThree.split(" + ")
+    val replaceJumps = jumps.replace(Regex("""\d+\s%+-?(?!\+)\s?"""), "")
+    val replaceJumpsTwo = replaceJumps.replace(Regex("""[+%]"""), "").trim()
+    val parts = replaceJumpsTwo.split("  ")
     for (i in parts) if (!i.contains(Regex("""\d"""))) return -1
     return parts.map { it.toInt() }.max()!!.toInt()
 }
@@ -171,9 +174,7 @@ fun bestHighJump(jumps: String): Int {
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    if (expression.isEmpty()) throw IllegalArgumentException()
-    if (expression.contains(Regex("""[^-+\s\d]"""))) throw IllegalArgumentException()
-    if (expression.contains(Regex("""\d\+|\+\d|\d-|-\d|\d( )\d"""))) throw IllegalArgumentException()
+    if (!expression.matches(Regex("""\d+(\s[-+]\s\d+)*"""))) throw IllegalArgumentException()
     val parts = expression.split(" ")
     var calculation = parts[0].toInt()
     if (parts.size == 1) return calculation
