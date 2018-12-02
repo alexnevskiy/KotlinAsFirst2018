@@ -157,7 +157,7 @@ fun bestLongJump(jumps: String): Int {
  * При нарушении формата входной строки вернуть -1.
  */
 fun bestHighJump(jumps: String): Int = if (!jumps.contains(Regex("""\d+(?=\s[-%+]*)"""))) -1
-else (Regex("""\d+(?=\s[-%]*[+])""")).findAll(jumps).map { it.value }.toList().map { it.toInt() }.max()!!
+else (Regex("""\d+(?=\s[-%]*[+])""")).findAll(jumps).map { it.value.toInt() }.toList().max()!!
 
 /**
  * Сложная
