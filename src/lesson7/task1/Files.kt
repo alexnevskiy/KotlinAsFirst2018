@@ -55,7 +55,7 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
     val map = mutableMapOf<String, Int>()
-    val read = File(inputName).bufferedReader().readLines().joinToString().toLowerCase()
+    val read = File(inputName).bufferedReader().readText().toLowerCase()
     for (i in 0 until substrings.size) map[substrings[i]] = 0
     for (name in substrings) {
         if (map[name]!! > 0) continue
@@ -119,16 +119,11 @@ fun sibilants(inputName: String, outputName: String) {
  */
 fun centerFile(inputName: String, outputName: String) {
     val output = File(outputName).bufferedWriter()
-    var maxLineLength = 0
-    for (line in File(inputName).readLines()) {
-        if (line.trim().length > maxLineLength) {
-            maxLineLength = line.trim().length
-        }
-    }
-    for (line in File(inputName).readLines()) {
-        if (maxLineLength > line.trim().length)
-            output.write(" ".repeat((maxLineLength + line.trim().length) / 2 - line.trim().length))
-        output.write(line.trim())
+    val maxLineLength = File(inputName).readLines().maxBy { it.trim().length }?.trim()?.length
+    for (line in File(inputName).readLines().map { it.trim() }) {
+        if (maxLineLength!! > line.length)
+            output.write(" ".repeat((maxLineLength + line.length) / 2 - line.length))
+        output.write(line)
         output.newLine()
     }
     output.close()
@@ -163,21 +158,16 @@ fun centerFile(inputName: String, outputName: String) {
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
     val output = File(outputName).bufferedWriter()
-    var maxLineLength = 0
-    for (line in File(inputName).readLines()) {
-        if (line.trim().length > maxLineLength) {
-            maxLineLength = line.trim().length
-        }
-    }
-    for (line in File(inputName).readLines()) {
-        val words = line.trim().split(Regex("""\s+""")).size
-        if (line.trim().replace(Regex("""\s+"""), " ").length == maxLineLength || words <= 1)
-            output.write(line.trim())
+    val maxLineLength = File(inputName).readLines().maxBy { it.trim().length }?.trim()?.length
+    for (line in File(inputName).readLines().map { it.trim() }) {
+        val words = line.split(Regex("""\s+""")).size
+        if (line.replace(Regex("""\s+"""), " ").length == maxLineLength || words <= 1)
+            output.write(line)
         else {
-            val numberOfSpaces = maxLineLength - line.trim().replace(Regex("""\s+"""), "").length
+            val numberOfSpaces = maxLineLength!! - line.replace(Regex("""\s+"""), "").length
             val spacesBetweenWords = numberOfSpaces / (words - 1)
             val residualSpaces = numberOfSpaces % (words - 1)
-            val list = line.trim().split(Regex("""\s+"""))
+            val list = line.split(Regex("""\s+"""))
             for (i in 0 until list.size) {
                 output.write(list[i])
                 if (i == words - 1) continue
