@@ -98,12 +98,8 @@ fun dateDigitToStr(digital: String): String {
     if (parts.size != 3) return ""
     val monthWord = listOf("января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября",
             "октября", "ноября", "декабря")
-    try {
-        if (parts[1].toInt() == 0 || parts[1].toInt() > 12) return ""
-    } catch (e: NumberFormatException) {
-
-    }
     return try {
+        if (parts[1].toInt() == 0 || parts[1].toInt() > 12) throw NumberFormatException()
         if (daysInMonth(parts[1].toInt(), parts[2].toInt()) >= parts[0].toInt())
             String.format("%d %s %s", parts[0].toInt(), monthWord[parts[1].toInt() - 1], parts[2].toInt())
         else ""
@@ -139,9 +135,8 @@ fun flattenPhoneNumber(phone: String): String =
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
 fun bestLongJump(jumps: String): Int {
-    val replaceJumps = jumps.replace(Regex("""[-%]"""), "").trim()
-    val replaceJumpsTwo = replaceJumps.replace(Regex("""\s+"""), " ")
-    val parts = replaceJumpsTwo.split(" ")
+    val replaceJumps = jumps.replace(Regex("""[-%\s]+"""), " ").trim()
+    val parts = replaceJumps.split(" ")
     for (i in parts) if (!i.contains(Regex("""\d"""))) return -1
     return parts.map { it.toInt() }.max()!!.toInt()
 }
@@ -156,9 +151,9 @@ fun bestLongJump(jumps: String): Int {
  * Прочитать строку и вернуть максимальную взятую высоту (230 в примере).
  * При нарушении формата входной строки вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = if (!jumps.contains(Regex("""\d+(?=\s[-%+]*)"""))) -1
-else (if (jumps.contains(Regex("""\d+(?=\s[-%]*[+])""")))
-    Regex("""\d+(?=\s[-%]*[+])""").findAll(jumps).map { it.value.toInt() }.toList().max()!! else -1)
+fun bestHighJump(jumps: String): Int =
+        if (!jumps.contains(Regex("""\d+(?=\s[-%]*[+])"""))) -1
+        else Regex("""\d+(?=\s[-%]*[+])""").findAll(jumps).map { it.value.toInt() }.toList().max()!!
 
 /**
  * Сложная
