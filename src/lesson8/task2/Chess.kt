@@ -21,10 +21,7 @@ data class Square(val column: Int, val row: Int) {
      * В нотации, колонки обозначаются латинскими буквами от a до h, а ряды -- цифрами от 1 до 8.
      * Для клетки не в пределах доски вернуть пустую строку
      */
-    fun notation(): String {
-        val chessBoard = listOf('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h')
-        return if (inside()) chessBoard[column - 1] + row.toString() else ""
-    }
+    fun notation(): String = if (inside()) 'a' + column - 1 + "$row" else ""
 }
 
 /**
@@ -34,12 +31,8 @@ data class Square(val column: Int, val row: Int) {
  * В нотации, колонки обозначаются латинскими буквами от a до h, а ряды -- цифрами от 1 до 8.
  * Если нотация некорректна, бросить IllegalArgumentException
  */
-fun square(notation: String): Square {
-    val chessBoard = listOf('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h')
-    return if (notation.matches(Regex("""[a-h][1-8]""")))
-        Square(chessBoard.indexOf(notation[0]) + 1, notation[1].toString().toInt())
-    else throw IllegalArgumentException()
-}
+fun square(notation: String): Square = if (notation.matches(Regex("""[a-h][1-8]""")))
+    Square(notation[0] - 'a' + 1, notation[1] - '0') else throw IllegalArgumentException()
 
 /**
  * Простая
@@ -86,19 +79,11 @@ fun rookMoveNumber(start: Square, end: Square): Int = when {
  * Если возможно несколько вариантов самой быстрой траектории, вернуть любой из них.
  */
 fun rookTrajectory(start: Square, end: Square): List<Square> {
-    val list = mutableListOf<Square>()
-    list.add(start)
+    val list = mutableListOf(start)
     return when (rookMoveNumber(start, end)) {
         0 -> list
-        1 -> {
-            list.add(end)
-            list
-        }
-        else -> {
-            list.add(Square(start.column, end.row))
-            list.add(end)
-            list
-        }
+        1 -> list + end
+        else -> list + Square(start.column, end.row) + end
     }
 }
 
