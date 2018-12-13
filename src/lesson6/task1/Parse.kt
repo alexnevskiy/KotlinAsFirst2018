@@ -101,7 +101,7 @@ fun dateDigitToStr(digital: String): String {
     return try {
         if (parts[1].toInt() == 0 || parts[1].toInt() > 12) throw NumberFormatException()
         if (daysInMonth(parts[1].toInt(), parts[2].toInt()) >= parts[0].toInt())
-            String.format("%d %s %s", parts[0].toInt(), monthWord[parts[1].toInt() - 1], parts[2].toInt())
+            String.format("%d %s %s", parts[0].toInt(), monthWord[parts[1].toInt() - 1], parts[2])
         else ""
     } catch (e: NumberFormatException) {
         ""
@@ -289,20 +289,23 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     var cellNumber = cells / 2
     val summaryCells = mutableListOf<Int>()
     var variableLimit = limit
-    for (i in 0 until cells) {
-        summaryCells.add(i, 0)
-    }
+    var counter = 0
+    for (i in 0 until cells) summaryCells.add(i, 0)
     if (commands == "") return summaryCells
     if (!commands.contains(Regex("""[+\-><\[\]\s]"""))) throw IllegalArgumentException()
+    for (i in commands) {
+        if (i == '[') counter++
+        if (i == ']') counter--
+        if (counter < 0) throw IllegalArgumentException()
+    }
+    if (counter != 0) throw IllegalArgumentException()
     for (i in 0 until commands.length) {
         if (commands[i] == '[') firstBracket += i
         if (commands[i] == ']') {
-            if (firstBracket.isEmpty()) throw IllegalArgumentException()
             pairBracket += firstBracket.last() to i
             firstBracket -= firstBracket.last()
         }
     }
-    if (firstBracket.isNotEmpty()) throw IllegalArgumentException()
     while (variableLimit != 0 && commandNumber != commands.length) {
         when (commands[commandNumber]) {
             '+' -> summaryCells[cellNumber]++
