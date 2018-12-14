@@ -1,5 +1,6 @@
 @file:Suppress("UNUSED_PARAMETER")
 package lesson8.task2
+import kotlin.math.abs
 
 /**
  * Клетка шахматной доски. Шахматная доска квадратная и имеет 8 х 8 клеток.
@@ -152,7 +153,10 @@ fun bishopTrajectory(start: Square, end: Square): List<Square> = TODO()
  * Пример: kingMoveNumber(Square(3, 1), Square(6, 3)) = 3.
  * Король может последовательно пройти через клетки (4, 2) и (5, 2) к клетке (6, 3).
  */
-fun kingMoveNumber(start: Square, end: Square): Int = TODO()
+fun kingMoveNumber(start: Square, end: Square): Int = when {
+    !start.inside() || !end.inside() -> throw IllegalArgumentException()
+    else -> maxOf(abs(start.column - end.column), abs(start.row - end.row))
+}
 
 /**
  * Сложная
@@ -168,7 +172,76 @@ fun kingMoveNumber(start: Square, end: Square): Int = TODO()
  *          kingTrajectory(Square(3, 5), Square(6, 2)) = listOf(Square(3, 5), Square(4, 4), Square(5, 3), Square(6, 2))
  * Если возможно несколько вариантов самой быстрой траектории, вернуть любой из них.
  */
-fun kingTrajectory(start: Square, end: Square): List<Square> = TODO()
+fun kingTrajectory(start: Square, end: Square): List<Square> {
+    val list = mutableListOf(Square(start.column, start.row))
+    var place = Square(start.column, start.row)
+    if (kingMoveNumber(start, end) == 0) return list
+    if (place.column - end.column <= 0 && place.row - end.row <= 0) {
+        while (list.last() != end) {
+            if (place.column - end.column < 0 && place.row - end.row < 0) {
+                place = Square(place.column + 1, place.row + 1)
+                list.add(place)
+            }
+            if (place.column - end.column < 0 && place.row - end.row == 0) {
+                place = Square(place.column + 1, place.row)
+                list.add(place)
+            }
+            if (place.column - end.column == 0 && place.row - end.row < 0) {
+                place = Square(place.column, place.row + 1)
+                list.add(place)
+            }
+        }
+    }
+    if (place.column - end.column >= 0 && place.row - end.row >= 0) {
+        while (list.last() != end) {
+            if (place.column - end.column > 0 && place.row - end.row > 0) {
+                place = Square(place.column - 1, place.row - 1)
+                list.add(place)
+            }
+            if (place.column - end.column > 0 && place.row - end.row == 0) {
+                place = Square(place.column - 1, place.row)
+                list.add(place)
+            }
+            if (place.column - end.column == 0 && place.row - end.row > 0) {
+                place = Square(place.column, place.row - 1)
+                list.add(place)
+            }
+        }
+    }
+    if (place.column - end.column >= 0 && place.row - end.row <= 0) {
+        while (list.last() != end) {
+            if (place.column - end.column > 0 && place.row - end.row < 0) {
+                place = Square(place.column - 1, place.row + 1)
+                list.add(place)
+            }
+            if (place.column - end.column > 0 && place.row - end.row == 0) {
+                place = Square(place.column - 1, place.row)
+                list.add(place)
+            }
+            if (place.column - end.column == 0 && place.row - end.row < 0) {
+                place = Square(place.column, place.row + 1)
+                list.add(place)
+            }
+        }
+    }
+    if (place.column - end.column <= 0 && place.row - end.row >= 0) {
+        while (list.last() != end) {
+            if (place.column - end.column < 0 && place.row - end.row > 0) {
+                place = Square(place.column + 1, place.row - 1)
+                list.add(place)
+            }
+            if (place.column - end.column < 0 && place.row - end.row == 0) {
+                place = Square(place.column + 1, place.row)
+                list.add(place)
+            }
+            if (place.column - end.column == 0 && place.row - end.row > 0) {
+                place = Square(place.column, place.row - 1)
+                list.add(place)
+            }
+        }
+    }
+    return list
+}
 
 /**
  * Сложная

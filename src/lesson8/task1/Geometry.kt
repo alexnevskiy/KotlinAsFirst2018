@@ -33,7 +33,8 @@ class Triangle private constructor(private val points: Set<Point>) {
 
     val c: Point get() = pointList[2]
 
-    constructor(a: Point, b: Point, c: Point): this(linkedSetOf(a, b, c))
+    constructor(a: Point, b: Point, c: Point) : this(linkedSetOf(a, b, c))
+
     /**
      * Пример: полупериметр
      */
@@ -104,22 +105,8 @@ data class Segment(val begin: Point, val end: Point) {
  * Дано множество точек. Вернуть отрезок, соединяющий две наиболее удалённые из них.
  * Если в множестве менее двух точек, бросить IllegalArgumentException
  */
-fun diameter(vararg points: Point): Segment {
-    if (points.size < 2) throw IllegalArgumentException()
-    var pointOne = points[0]
-    var pointTwo = points[1]
-    var maxDistance = pointOne.distance(pointTwo)
-    for (i in 0 until points.size) {
-        for (j in i + 1 until points.size) {
-            if (points[i].distance(points[j]) > maxDistance) {
-                maxDistance = points[i].distance(points[j])
-                pointOne = points[i]
-                pointTwo = points[j]
-            }
-        }
-    }
-    return Segment(pointOne, pointTwo)
-}
+fun diameter(vararg points: Point): Segment = points
+        .flatMap { from -> points.map { to -> Segment(from, to) } }.sortedByDescending { it.begin.distance(it.end) }[0]
 
 /**
  * Простая
@@ -144,7 +131,7 @@ class Line private constructor(val b: Double, val angle: Double) {
         require(angle >= 0 && angle < PI) { "Incorrect line angle: $angle" }
     }
 
-    constructor(point: Point, angle: Double): this(point.y * cos(angle) - point.x * sin(angle), angle)
+    constructor(point: Point, angle: Double) : this(point.y * cos(angle) - point.x * sin(angle), angle)
 
     /**
      * Средняя
