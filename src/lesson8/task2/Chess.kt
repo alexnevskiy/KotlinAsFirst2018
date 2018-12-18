@@ -176,27 +176,27 @@ fun kingTrajectory(start: Square, end: Square): List<Square> {
     val list = mutableListOf(Square(start.column, start.row))
     var place = Square(start.column, start.row)
     if (kingMoveNumber(start, end) == 0) return list
+    val diffX = place.column - end.column
+    val offsetX = when {
+        diffX > 0 -> -1
+        diffX == 0 -> 0
+        else -> 1
+    }
+    val diffY = place.row - end.row
+    val offsetY = when {
+        diffY > 0 -> -1
+        diffY == 0 -> 0
+        else -> 1
+    }
     while (list.last() != end) {
-        val diffX = place.column - end.column
-        val offsetX = when {
-            diffX > 0 -> -1
-            diffX == 0 -> 0
-            else -> 1
-        }
-        val diffY = place.row - end.row
-        val offsetY = when {
-            diffY > 0 -> -1
-            diffY == 0 -> 0
-            else -> 1
-        }
         place = when (offsetX) {
-            -1 -> Square(place.column - 1, place.row)
-            1 -> Square(place.column + 1, place.row)
+            -1 -> if (place.column == end.column) Square(place.column, place.row) else Square(place.column - 1, place.row)
+            1 -> if (place.column == end.column) Square(place.column, place.row) else Square(place.column + 1, place.row)
             else -> Square(place.column, place.row)
         }
         place = when (offsetY) {
-            -1 -> Square(place.column, place.row - 1)
-            1 -> Square(place.column, place.row + 1)
+            -1 -> if (place.row == end.row) Square(place.column, place.row) else Square(place.column, place.row - 1)
+            1 -> if (place.row == end.row) Square(place.column, place.row) else Square(place.column, place.row + 1)
             else -> Square(place.column, place.row)
         }
         list.add(place)
